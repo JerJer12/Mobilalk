@@ -11,8 +11,11 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import com.example.reflecgame.R
 import com.example.reflecgame.databinding.GameFragmentBinding
+
+
 
 class GameFragment : Fragment() {
 
@@ -31,17 +34,28 @@ class GameFragment : Fragment() {
         binding.lifecycleOwner=viewLifecycleOwner
         viewModel._readygo.value ="Ready"
         viewModel.eventGameEnd.observe(viewLifecycleOwner, Observer {hasEnded ->
-            if (hasEnded) gameEnded()
+            if (hasEnded) {//gameEnded()
+               // findNavController().navigate(GameFragmentDirections.actionGameToResult())
+                viewModel.onGameEndComp()
+            }
         })
+        //todo: ne lehessen hamarabb megnyomni a gombot
+       /* binding.pressButton.setOnClickListener {
+            findNavController().navigate(GameFragmentDirections.actionGameToResult())
+        }*/
+        binding.readyButton.setOnClickListener {
+            viewModel.onReady()
+        }
         return binding.root
 
 
     }
 
+
     private fun gameEnded(){
         val action = GameFragmentDirections.actionGameToResult()
         //find out why it doesnt find the result
-        //action.result = viewModel.result.value ?:0
+        // action.result = viewModel.result.value ?:0
         NavHostFragment.findNavController(this).navigate(action)
         viewModel.onGameEndComp()
     }

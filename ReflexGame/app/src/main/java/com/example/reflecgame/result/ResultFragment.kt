@@ -6,16 +6,22 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
+import androidx.navigation.fragment.findNavController
 import com.example.reflecgame.R
-import com.example.reflecgame.databinding.GameFragmentBinding
 import com.example.reflecgame.databinding.ResultFragmentBinding
+import com.example.reflecgame.game.GameFragmentDirections
 import com.example.reflecgame.game.GameViewModel
+import com.example.reflecgame.menu.StartFragmentDirections
 
 
 class ResultFragment: Fragment() {
-/*
+
     private lateinit var viewModel: ResultViewModel
+    private lateinit var gameviewModel: GameViewModel
     private lateinit var viewModelFactory: ResultViewModelFactory
 
     override fun onCreateView(
@@ -31,18 +37,22 @@ class ResultFragment: Fragment() {
             container,
             false
         )
-        viewModelFactory =
-            ResultViewModelFactory(ResultFragmentArgs.fromBundle(requireArguments()).score)
-        viewModel = ViewModelProvider(this, viewModelFactory).get(ScoreViewModel::class.java)
-        binding.scoreViewModel = viewModel
+        viewModelFactory = ResultViewModelFactory(ResultFragmentArgs.fromBundle(requireArguments()).result.toLong())
+        viewModel = ViewModelProvider(this, viewModelFactory).get(ResultViewModel::class.java)
+        gameviewModel = ViewModelProvider(this).get(GameViewModel::class.java)
+        viewModel.startObserving(gameviewModel)
+        binding.resultViewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
-        viewModel.eventPlayAgain.observe(viewLifecycleOwner, Observer { playAgain ->
-            if (playAgain) {
-                findNavController().navigate(ScoreFragmentDirections.actionRestart())
-                viewModel.onPlayAgainComplete()
-            }
-        })
+
+
+        binding.homeButton.setOnClickListener {
+            //findNavController().navigate(StartFragmentDirections.actionStartToGame())
+            findNavController().navigate(ResultFragmentDirections.actionResultToStart())
+        }
+
+
         return binding.root
     }
-*/
+
+
 }

@@ -5,7 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [Score::class], version = 1, exportSchema = false)
+@Database(entities = [ScoreBoard::class], version = 1, exportSchema = false)
 abstract class ScoreDatabase: RoomDatabase(){
 
     abstract val scoreDatabaseDao: ScoreDatabaseDao
@@ -26,6 +26,7 @@ abstract class ScoreDatabase: RoomDatabase(){
                     )
                         .fallbackToDestructiveMigration()
                         .build()
+                    INSTANCE=instance
                 }
                 return instance
             }

@@ -33,46 +33,24 @@ class GameViewModel(
     //application: Application
 ) : ViewModel() {
 
-    val random=Random()
+    private val random=Random()
 
     val backgroundColor = MutableLiveData<Int>()
-    /*val backgroundColor: LiveData<Int>
-        get() = _backgroundColor*/
-
-   // gameViewModel.backgroundColor.value = Color.parseColor("#FF0000")
-
-    var round=0
-    val maxround=1
 
     val waitTime=random.nextInt(3000)+2000 //generate random number between 500 and 1500
 
     val _readygo = MutableLiveData<String>()
     val readygo: LiveData<String>
         get() = _readygo
-/*
-    fun StartGame(){
-        Thread.sleep(waitTime.toLong())
-        _readygo.value = "Go"
-
-
-    }*/
 
     //val database = dataSource
-    val startTime = currentTimeMillis()
+    //val startTime = currentTimeMillis()
     //var endTime: Long = startTimeMilli
 
-    companion object {
-       // private var time_start=0L
-      //  private var time_end=0L
 
-    }
     private val _result = MutableLiveData<Long>()
     val result: LiveData<Long>
         get() = _result
-
-    //private val timer= Timer()
-
-
 
 
     private val _eventGameEnd= MutableLiveData<Boolean>()
@@ -91,19 +69,29 @@ class GameViewModel(
         _result.value = 0
 
     }
+    val _finalresult = MutableLiveData<Long>()
+    val finalresult: LiveData<Long>
+        get() = _finalresult
 
-
+    var startTime = currentTimeMillis()
     fun onReady(){
-      //  time_start=System.currentTimeMillis()
-       // _readygo.value ="Ready"
+
+        //_readygo.value ="Ready"
         Thread.sleep(waitTime.toLong())
+        startTime = currentTimeMillis()
         _readygo.value = "Go"
     }
 
     fun onPress(){
-       // time_end=System.currentTimeMillis()-time_start
-        val endTime= System.currentTimeMillis()
-        val reactionTime = endTime- startTime
+        _readygo.value ="Ready"
+        val endTime= currentTimeMillis()
+        //_readygo.value = (result.value)?.plus(1).toString()
+        _result.value = endTime - startTime// -(waitTime.toLong())
+        val finalscore=endTime - startTime //- (waitTime.toLong())
+        _finalresult.value=endTime - startTime //- (waitTime.toLong())
+        _eventGameEnd.value = true
+        Log.i("ResultViewModel", "Final score is $finalscore ")
+        Log.i("ResultViewModel", "Final result is $finalresult ")
     }
 
 
