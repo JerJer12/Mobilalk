@@ -1,16 +1,23 @@
 package com.example.reflecgame.result
 
+import android.text.method.TextKeyListener.clear
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.reflecgame.database.ScoreBoard
 import com.example.reflecgame.database.ScoreDatabaseDao
 import com.example.reflecgame.game.GameViewModel
+import kotlinx.coroutines.launch
 
 class ResultViewModel(private val scoreKey: Long= 0L, dataSource: ScoreDatabaseDao) : ViewModel() {
 
     val database = dataSource
+
+    private suspend fun clear() {
+        database.clear()
+    }
 
     //there might be a problem because of this
    //private val scores: LiveData<List<ScoreBoard>>
@@ -21,6 +28,7 @@ class ResultViewModel(private val scoreKey: Long= 0L, dataSource: ScoreDatabaseD
 
     init {
         scores=database.getScoreWithId(scoreKey)
+
     }
 
     private val _result = MutableLiveData<Long>()
@@ -46,6 +54,13 @@ class ResultViewModel(private val scoreKey: Long= 0L, dataSource: ScoreDatabaseD
 
          Log.i("ResultViewModel", "Final score in results is $score")
     }*/
+
+    fun onDeleteAll(){
+        viewModelScope.launch {
+            clear()
+        }
+
+    }
 
     private val _navigateToScore = MutableLiveData<Long?>()
     val navigateToScore

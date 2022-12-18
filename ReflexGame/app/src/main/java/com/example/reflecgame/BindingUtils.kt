@@ -7,6 +7,8 @@ import com.example.reflecgame.database.ScoreBoard
 @BindingAdapter("scoreFormatted")
 fun TextView.setScoreFormatted(item: ScoreBoard?){
     item?.let {
-        text= yourScoreFormatted(item.startTime,item.endTime, context.resources)
+        text= yourScoreFormatted(item.reactionTime, context.resources)
     }
+
 }
+

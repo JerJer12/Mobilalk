@@ -10,4 +10,5 @@
     <string name="your_score_is">Your scores :</string>
     <string name="scores">Scores</string>
     <string name="scoresboard">ScoresBoard</string>
+    <string name="delete_all">Delete all</string>
 </resources>

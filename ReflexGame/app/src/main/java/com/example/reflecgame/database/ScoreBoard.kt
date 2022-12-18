@@ -11,12 +11,12 @@ data class ScoreBoard(
     var scoreId: Long = 0L,
 
     @ColumnInfo(name = "start_time")
-    val startTime: Long = System.currentTimeMillis(),
+    var startTime: Long = System.currentTimeMillis(),
 
     @ColumnInfo(name = "end_time")
     var endTime: Long = startTime,
 
     @ColumnInfo(name = "reaction_time")
-    var reactionTime: Long =0L
+    var reactionTime: Long = endTime-startTime
 
 )

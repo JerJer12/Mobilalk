@@ -20,7 +20,7 @@ import java.util.Random
 
 //import kotlinx.android.synthetic.main.activity_main.*
 
-class GameViewModel(dataSource: ScoreDatabaseDao, application: Application) : ViewModel() {
+class GameViewModel(dataSource: ScoreDatabaseDao, application: Application, private val scoreKey: Long=0L) : ViewModel() {
 
     val database = dataSource
 
@@ -28,9 +28,6 @@ class GameViewModel(dataSource: ScoreDatabaseDao, application: Application) : Vi
 
     private var lastScore = MutableLiveData<ScoreBoard?>()
 
-    /*init{
-
-    }*/
 
     val scoreString= Transformations.map(scores) {scores ->
         formatScores(scores, application.resources)
@@ -42,6 +39,9 @@ class GameViewModel(dataSource: ScoreDatabaseDao, application: Application) : Vi
 
     private suspend fun getLastScoreFromDatabase(): ScoreBoard? {
         var score = database.getLastScore()
+        /*if (score?.endTime != score?.startTime) {
+            score = null
+        }*/
         return score
     }
 
@@ -90,6 +90,7 @@ class GameViewModel(dataSource: ScoreDatabaseDao, application: Application) : Vi
     }
 
    init {
+       initializeLastScore()
         _result.value = 0
        _readygo.value = "Ready"
 
@@ -106,37 +107,46 @@ class GameViewModel(dataSource: ScoreDatabaseDao, application: Application) : Vi
     val readyEnabled: LiveData<Boolean>
         get() = _readyEnabled
 
-    var startTime = currentTimeMillis()
-    fun onReady(){
+    private val _navToScore = MutableLiveData<ScoreBoard>()
+    val navToScore: LiveData<ScoreBoard>
+        get() = _navToScore
 
+    var startTime = currentTimeMillis()
+    //val newScore = ScoreBoard()
+    fun onReady(){
         viewModelScope.launch{
             val newScore = ScoreBoard()
+            newScore.startTime = currentTimeMillis()
 
             insert(newScore)
-            //lastScore.value= getLastScoreFromDatabase()
-        }
+            lastScore.value= getLastScoreFromDatabase()
+
         _readyEnabled.value= false
         _pressEnabled.value=true
         //_readygo.value ="Ready"
         Thread.sleep(waitTime.toLong())
         startTime = currentTimeMillis()
         _readygo.value = "Go"
+        }
     }
-
-
 
     fun onPress(){
 
         viewModelScope.launch {
             val oldScore= lastScore.value ?: return@launch
+            oldScore.endTime= currentTimeMillis()
             oldScore.reactionTime= currentTimeMillis() - startTime
             update(oldScore)
+            //newScore.endTime= currentTimeMillis()
+            //insert(newScore)
+            //update(newScore)
+            //_navToScore.value =oldScore
+
         }
         _readyEnabled.value= true
         _pressEnabled.value=false
         _readygo.value ="Ready"
         val endTime= currentTimeMillis()
-        //_readygo.value = (result.value)?.plus(1).toString()
         _result.value = endTime - startTime// -(waitTime.toLong())
         val finalscore=endTime - startTime //- (waitTime.toLong())
         _finalresult.value=endTime - startTime //- (waitTime.toLong())
@@ -144,8 +154,14 @@ class GameViewModel(dataSource: ScoreDatabaseDao, application: Application) : Vi
         Log.i("ResultViewModel", "Final score is $finalscore ")
         Log.i("ResultViewModel", "Final result is $finalresult ")
     }
+    fun onDeleteAll(){
+        viewModelScope.launch {
+            clear()
 
+            lastScore.value=null
+        }
 
+    }
 
 }
 

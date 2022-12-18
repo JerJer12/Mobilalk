@@ -14,8 +14,8 @@ fun yourScore(startTimeMilli:Long, endTimeMilli:Long):String {
     return "{reactionTimeMilli} seconds"
 }
 
-fun yourScoreFormatted(startTime:Long, endTime: Long, res:Resources): String{
-    val reactionTime= endTime - startTime
+fun yourScoreFormatted(reactionTime: Long, res:Resources): String{
+   // val reactionTime= endTime - startTime
     return res.getString(R.string.milliseconds, reactionTime)
 
 }

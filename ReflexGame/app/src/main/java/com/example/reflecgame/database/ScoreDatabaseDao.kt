@@ -25,4 +25,7 @@ interface ScoreDatabaseDao {
 
     @Query("SELECT * from scoreboard WHERE scoreId = :key")
     fun getScoreWithId(key: Long): LiveData<ScoreBoard>
+
+    @Query("SELECT * from scoreboard WHERE scoreId = :key")
+    suspend fun get(key: Long): ScoreBoard
 }
