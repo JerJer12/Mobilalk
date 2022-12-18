@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    
+    <data>
+        <variable
+            name="gameViewModel"
+            type="com.example.reflecgame.game.GameViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/game_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible"
+        tools:context=".game.GameFragment"
+        tools:visibility="visible"
+       >
+
+        <TextView
+            android:id="@+id/readyText"
+            android:layout_width="190dp"
+            android:layout_height="60dp"
+            android:layout_marginBottom="100dp"
+            android:text="@{@string/readyGo(gameViewModel.readygo)}"
+            android:textAlignment="center"
+            android:textSize="48sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/readyButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.5" />
+
+
+        <TextView
+            android:id="@+id/resultText"
+            android:layout_width="190dp"
+            android:layout_height="60dp"
+            android:layout_marginBottom="100dp"
+            android:text="@{@string/milliseconds(gameViewModel.result)}"
+            android:textAlignment="center"
+            android:textSize="48sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/readyButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.502"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.887" />
+
+        <Button
+            android:id="@+id/pressButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="110dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="160dp"
+            android:layout_marginEnd="60dp"
+            android:text="@string/press"
+            android:onClick="@{() -> gameViewModel.onPress()}"
+            android:enabled="@{gameViewModel.pressButtonVisible}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.737"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintStart_toEndOf="@id/readyButton"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <Button
+            android:id="@+id/readyButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="160dp"
+            android:layout_marginStart="60dp"
+            android:onClick="@{() -> gameViewModel.onReady()}"
+            android:enabled="@{gameViewModel.readyButtonVisible}"
+            android:text="@string/ready"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/pressButton"
+            app:layout_constraintHorizontal_bias="0.198"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/scoreButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="32dp"
+            android:layout_marginBottom="68dp"
+            android:text="@string/scoresboard"
+            app:layout_constraintBottom_toTopOf="@id/readyText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.59" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

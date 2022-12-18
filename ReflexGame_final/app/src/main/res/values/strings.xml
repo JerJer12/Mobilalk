@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">ReflexGame</string>
+    <string name="play">Play</string>
+    <string name="welcome_text">Welcome to Reflex Game!</string>
+    <string name="press">Press</string>
+    <string name="ready">Ready</string>
+    <string name="readyGo"> %s </string>
+    <string name="milliseconds"> %d ms </string>
+    <string name="home">Home</string>
+    <string name="your_score_is">Your scores :</string>
+    <string name="scores">Scores</string>
+    <string name="scoresboard">ScoresBoard</string>
+    <string name="delete_all">Delete all</string>
+</resources>
