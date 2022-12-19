@@ -7,11 +7,12 @@ import com.example.reflecgame.database.ScoreDatabaseDao
 
 class ResultViewModelFactory(
     private val scoreKey: Long,
-    private val dataSource: ScoreDatabaseDao) : ViewModelProvider.Factory {
+    private val dataSource: ScoreDatabaseDao,
+    private val scoreRepository: ScoreRepository) : ViewModelProvider.Factory {
     @Suppress("unchecked_cast")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(ResultViewModel::class.java)) {
-            return ResultViewModel(scoreKey, dataSource) as T
+            return ResultViewModel(scoreKey, dataSource, scoreRepository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

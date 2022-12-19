@@ -12,7 +12,6 @@ import androidx.navigation.fragment.findNavController
 import com.example.reflecgame.R
 import com.example.reflecgame.ScoreRepository
 import com.example.reflecgame.database.ScoreDatabase
-import com.example.reflecgame.database.ScoreDatabaseDao
 import com.example.reflecgame.databinding.GameFragmentBinding
 
 
@@ -31,10 +30,10 @@ class GameFragment : Fragment() {
     )
 
     val application = requireNotNull(this.activity).application
-
+        val scoreRepository = ScoreRepository(ScoreDatabase.getInstance(application))
 
     val dataSource=ScoreDatabase.getInstance(application).scoreDatabaseDao
-    val viewModelFactory = GameViewModelFactory(dataSource,application)
+    val viewModelFactory = GameViewModelFactory(dataSource,application,scoreRepository)
 
     val gameViewModel = ViewModelProvider(
         this, viewModelFactory).get(GameViewModel::class.java)
@@ -42,10 +41,6 @@ class GameFragment : Fragment() {
     binding.gameViewModel = gameViewModel
 
     binding.lifecycleOwner =this
-
-       /* binding.pressButton.setOnClickListener {
-            findNavController().navigate(GameFragmentDirections.actionGameToResult())
-        }*/
 
 
         binding.readyButton.setOnClickListener {

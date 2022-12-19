@@ -7,24 +7,22 @@ import androidx.lifecycle.ViewModel
 import android.util.Log
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.viewModelScope
-import com.example.reflecgame.R
 import com.example.reflecgame.ScoreRepository
 import com.example.reflecgame.database.ScoreBoard
 import com.example.reflecgame.database.ScoreDatabaseDao
-import com.example.reflecgame.formatScores
-import com.example.reflecgame.yourScoreFormatted
 import kotlinx.coroutines.launch
 import java.lang.System.currentTimeMillis
 import java.util.Random
 
 
-class GameViewModel(dataSource: ScoreDatabaseDao, application: Application) : ViewModel() {
+class GameViewModel(dataSource: ScoreDatabaseDao, application: Application, scoreRepository: ScoreRepository) : ViewModel() {
 
-   // private lateinit var scoreRepository : ScoreRepository
+    val scoreRep = scoreRepository
+
 
     val database = dataSource
 
-   // val scores = scoreRepository.getAllScores()
+    val scores = scoreRepository.getAllScores()
 
     private var lastScore = MutableLiveData<ScoreBoard?>()
 
@@ -41,7 +39,8 @@ class GameViewModel(dataSource: ScoreDatabaseDao, application: Application) : Vi
 
     private suspend fun getLastScoreFromDatabase(): ScoreBoard? {
        // val score = scoreRepository.getLastScore()
-        val score = database.getLastScore()
+        val score = scoreRep.getLastScore()
+        //val score = database.getLastScore()
         /*if (score?.endTime != score?.startTime) {
             score = null
         }*/
@@ -55,15 +54,15 @@ class GameViewModel(dataSource: ScoreDatabaseDao, application: Application) : Vi
         }
     }
 
-   private suspend fun insert(score:ScoreBoard){
+  /* private suspend fun insert(score:ScoreBoard){
         database.insert(score)
-       // scoreRepository.insert(score)
-    }
+       // scoreRep.insert(score)
+    }*/
 
-    private suspend fun update(score:ScoreBoard){
+  /*  private suspend fun update(score:ScoreBoard){
         database.update(score)
-        //scoreRepository.update(score)
-    }
+        //scoreRep.update(score)
+    }*/
 
     private val random=Random()
 
@@ -101,8 +100,8 @@ class GameViewModel(dataSource: ScoreDatabaseDao, application: Application) : Vi
             val newScore = ScoreBoard()
             newScore.startTime = currentTimeMillis()
 
-            insert(newScore)
-            //scoreRepository.insert(newScore)
+           // insert(newScore)
+            scoreRep.insert(newScore)
             lastScore.value= getLastScoreFromDatabase()
             buttonControl.value =getLastScoreFromDatabase()
 
@@ -119,14 +118,10 @@ class GameViewModel(dataSource: ScoreDatabaseDao, application: Application) : Vi
             val oldScore= lastScore.value ?: return@launch
             oldScore.endTime= currentTimeMillis()
             oldScore.reactionTime= currentTimeMillis() - startTime
-            update(oldScore)
-            //scoreRepository.update(oldScore)
+            //update(oldScore)
+            scoreRep.update(oldScore)
             buttonControl.value =null
 
-            //newScore.endTime= currentTimeMillis()
-            //insert(newScore)
-            //update(newScore)
-            //_navToScore.value =oldScore
 
         }
 

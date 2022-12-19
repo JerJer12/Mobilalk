@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.reflecgame.MyAdapter
 import com.example.reflecgame.R
 import com.example.reflecgame.ScoreListener
+import com.example.reflecgame.ScoreRepository
 import com.example.reflecgame.database.ScoreDatabase
 import com.example.reflecgame.databinding.ResultFragmentBinding
 
@@ -36,9 +37,10 @@ class ResultFragment: Fragment() {
         )
         val application = requireNotNull(this.activity).application
         val arguments = ResultFragmentArgs.fromBundle(requireArguments())
+        val scoreRepository = ScoreRepository(ScoreDatabase.getInstance(application))
 
         val dataSource= ScoreDatabase.getInstance(application).scoreDatabaseDao
-        val viewModelFactory=ResultViewModelFactory(arguments.scoreKey,dataSource)
+        val viewModelFactory=ResultViewModelFactory(arguments.scoreKey,dataSource, scoreRepository)
 
         val resultViewModel = ViewModelProvider(
             this,viewModelFactory).get(ResultViewModel::class.java)

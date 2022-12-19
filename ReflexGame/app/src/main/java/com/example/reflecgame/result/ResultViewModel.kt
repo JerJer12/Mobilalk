@@ -7,16 +7,16 @@ import com.example.reflecgame.database.ScoreBoard
 import com.example.reflecgame.database.ScoreDatabaseDao
 import kotlinx.coroutines.launch
 
-class ResultViewModel(private val scoreKey: Long= 0L, dataSource: ScoreDatabaseDao) : ViewModel() {
+class ResultViewModel(private val scoreKey: Long= 0L, dataSource: ScoreDatabaseDao, scoreRepository: ScoreRepository) : ViewModel() {
 
-   // private lateinit var scoreRepository : ScoreRepository
+    val scoreRep = scoreRepository
 
     val database = dataSource
-
+/*
     private suspend fun clear() {
         database.clear()
-       // scoreRepository.clear()
-    }
+       // scoreRep.clear()
+    }*/
 
     //there might be a problem because of this
    //private val scores: LiveData<List<ScoreBoard>>
@@ -39,8 +39,8 @@ class ResultViewModel(private val scoreKey: Long= 0L, dataSource: ScoreDatabaseD
 
     fun onDeleteAll(){
         viewModelScope.launch {
-           // scoreRepository.clear()
-            clear()
+            scoreRep.clear()
+            //clear()
         }
 
     }
