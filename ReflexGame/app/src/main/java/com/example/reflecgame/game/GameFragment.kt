@@ -10,9 +10,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.reflecgame.R
-import com.example.reflecgame.ScoreListener
-import com.example.reflecgame.database.ScoreBoard
+import com.example.reflecgame.ScoreRepository
 import com.example.reflecgame.database.ScoreDatabase
+import com.example.reflecgame.database.ScoreDatabaseDao
 import com.example.reflecgame.databinding.GameFragmentBinding
 
 
@@ -31,6 +31,7 @@ class GameFragment : Fragment() {
     )
 
     val application = requireNotNull(this.activity).application
+
 
     val dataSource=ScoreDatabase.getInstance(application).scoreDatabaseDao
     val viewModelFactory = GameViewModelFactory(dataSource,application)

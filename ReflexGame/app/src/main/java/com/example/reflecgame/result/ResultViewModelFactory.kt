@@ -2,6 +2,7 @@ package com.example.reflecgame.result
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.example.reflecgame.ScoreRepository
 import com.example.reflecgame.database.ScoreDatabaseDao
 
 class ResultViewModelFactory(
