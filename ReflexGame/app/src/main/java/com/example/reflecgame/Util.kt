@@ -37,4 +37,3 @@ fun formatScores(scores: List<ScoreBoard>, resources: Resources): Spanned{
 
 }
 
-class TextItemViewHolder(val textView: TextView): RecyclerView.ViewHolder(textView)

@@ -56,13 +56,6 @@
             app:launchSingleTop="true"
             app:popUpTo="@id/start_destination"
             />
-       <!-- <argument
-            android:name="scoreKey"
-            app:argType="long" /> -->
-           <!-- <argument
-                android:name="result"
-                app:argType="integer"
-                android:defaultValue="1"/> -->
     </fragment>
 
 </navigation>

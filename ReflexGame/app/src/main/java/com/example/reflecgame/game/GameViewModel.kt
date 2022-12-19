@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import android.util.Log
-import android.widget.Button
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.viewModelScope
 import com.example.reflecgame.R
@@ -18,9 +17,7 @@ import java.lang.System.currentTimeMillis
 import java.util.Random
 
 
-//import kotlinx.android.synthetic.main.activity_main.*
-
-class GameViewModel(dataSource: ScoreDatabaseDao, application: Application, private val scoreKey: Long=0L) : ViewModel() {
+class GameViewModel(dataSource: ScoreDatabaseDao, application: Application) : ViewModel() {
 
     val database = dataSource
 
@@ -28,17 +25,19 @@ class GameViewModel(dataSource: ScoreDatabaseDao, application: Application, priv
 
     private var lastScore = MutableLiveData<ScoreBoard?>()
 
+    private var buttonControl = MutableLiveData<ScoreBoard?>()
 
-    val scoreString= Transformations.map(scores) {scores ->
-        formatScores(scores, application.resources)
+
+    val pressButtonVisible = Transformations.map(buttonControl){
+        null !=it
     }
 
-    val readyButtonVisible = Transformations.map(lastScore){
-        null !==it
+    val readyButtonVisible = Transformations.map(buttonControl){
+        null ==it
     }
 
     private suspend fun getLastScoreFromDatabase(): ScoreBoard? {
-        var score = database.getLastScore()
+        val score = database.getLastScore()
         /*if (score?.endTime != score?.startTime) {
             score = null
         }*/
@@ -46,7 +45,10 @@ class GameViewModel(dataSource: ScoreDatabaseDao, application: Application, priv
     }
 
     private fun initializeLastScore() {
-        viewModelScope.launch { lastScore.value=getLastScoreFromDatabase() }
+        viewModelScope.launch {
+            lastScore.value=getLastScoreFromDatabase()
+            buttonControl.value=null
+        }
     }
 
     private suspend fun insert(score:ScoreBoard){
@@ -56,11 +58,6 @@ class GameViewModel(dataSource: ScoreDatabaseDao, application: Application, priv
     private suspend fun update(score:ScoreBoard){
         database.update(score)
     }
-
-    private suspend fun clear() {
-        database.clear()
-    }
-
 
     private val random=Random()
 
@@ -77,17 +74,6 @@ class GameViewModel(dataSource: ScoreDatabaseDao, application: Application, priv
         get() = _result
 
 
-    private val _eventGameEnd= MutableLiveData<Boolean>()
-    val eventGameEnd: LiveData<Boolean>
-        get() = _eventGameEnd
-
-    fun onGameEnd(){
-        _eventGameEnd.value = true
-    }
-
-    fun onGameEndComp(){
-        _eventGameEnd.value = false
-    }
 
    init {
        initializeLastScore()
@@ -95,21 +81,11 @@ class GameViewModel(dataSource: ScoreDatabaseDao, application: Application, priv
        _readygo.value = "Ready"
 
     }
-    val _finalresult = MutableLiveData<Long>()
+    private val _finalresult = MutableLiveData<Long>()
     val finalresult: LiveData<Long>
         get() = _finalresult
 
-    private val _pressEnabled= MutableLiveData<Boolean>()
-    val pressEnabled: LiveData<Boolean>
-        get() = _pressEnabled
 
-    private val _readyEnabled= MutableLiveData<Boolean>()
-    val readyEnabled: LiveData<Boolean>
-        get() = _readyEnabled
-
-    private val _navToScore = MutableLiveData<ScoreBoard>()
-    val navToScore: LiveData<ScoreBoard>
-        get() = _navToScore
 
     var startTime = currentTimeMillis()
     //val newScore = ScoreBoard()
@@ -120,9 +96,8 @@ class GameViewModel(dataSource: ScoreDatabaseDao, application: Application, priv
 
             insert(newScore)
             lastScore.value= getLastScoreFromDatabase()
+            buttonControl.value =getLastScoreFromDatabase()
 
-        _readyEnabled.value= false
-        _pressEnabled.value=true
         //_readygo.value ="Ready"
         Thread.sleep(waitTime.toLong())
         startTime = currentTimeMillis()
@@ -137,32 +112,26 @@ class GameViewModel(dataSource: ScoreDatabaseDao, application: Application, priv
             oldScore.endTime= currentTimeMillis()
             oldScore.reactionTime= currentTimeMillis() - startTime
             update(oldScore)
+            buttonControl.value =null
+
             //newScore.endTime= currentTimeMillis()
             //insert(newScore)
             //update(newScore)
             //_navToScore.value =oldScore
 
         }
-        _readyEnabled.value= true
-        _pressEnabled.value=false
+
         _readygo.value ="Ready"
         val endTime= currentTimeMillis()
         _result.value = endTime - startTime// -(waitTime.toLong())
         val finalscore=endTime - startTime //- (waitTime.toLong())
         _finalresult.value=endTime - startTime //- (waitTime.toLong())
-        _eventGameEnd.value = true
         Log.i("ResultViewModel", "Final score is $finalscore ")
         Log.i("ResultViewModel", "Final result is $finalresult ")
     }
-    fun onDeleteAll(){
-        viewModelScope.launch {
-            clear()
 
-            lastScore.value=null
-        }
-
-    }
 
 }
+
 
 

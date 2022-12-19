@@ -63,7 +63,7 @@
             android:layout_marginEnd="60dp"
             android:text="@string/press"
             android:onClick="@{() -> gameViewModel.onPress()}"
-
+            android:enabled="@{gameViewModel.pressButtonVisible}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.737"
@@ -79,7 +79,7 @@
             android:layout_marginBottom="160dp"
             android:layout_marginStart="60dp"
             android:onClick="@{() -> gameViewModel.onReady()}"
-
+            android:enabled="@{gameViewModel.readyButtonVisible}"
             android:text="@string/ready"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/pressButton"

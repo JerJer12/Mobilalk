@@ -26,7 +26,6 @@ class StartFragment: Fragment() {
 
 
         binding.playButton.setOnClickListener {
-           //findNavController().navigate(StartFragmentDirections.actionStartToGame())
             findNavController().navigate(StartFragmentDirections.actionStartToGame())
         }
         return binding.root

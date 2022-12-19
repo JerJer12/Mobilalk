@@ -1,14 +1,9 @@
 package com.example.reflecgame.result
 
-import android.text.method.TextKeyListener.clear
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.example.reflecgame.database.ScoreBoard
 import com.example.reflecgame.database.ScoreDatabaseDao
-import com.example.reflecgame.game.GameViewModel
 import kotlinx.coroutines.launch
 
 class ResultViewModel(private val scoreKey: Long= 0L, dataSource: ScoreDatabaseDao) : ViewModel() {
@@ -24,8 +19,6 @@ class ResultViewModel(private val scoreKey: Long= 0L, dataSource: ScoreDatabaseD
     private val scores: LiveData<ScoreBoard>
     val scores2=database.getAllScores()
 
-    fun getScores()= scores
-
     init {
         scores=database.getScoreWithId(scoreKey)
 
@@ -36,41 +29,14 @@ class ResultViewModel(private val scoreKey: Long= 0L, dataSource: ScoreDatabaseD
         get() = _result
 
 
-
-
-    val _finalresult = MutableLiveData<Long>()
-    val finalresult: LiveData<Long>
-        get() = _finalresult
-
-
-    fun startObserving(gameViewModel: GameViewModel){
-        gameViewModel.finalresult.observeForever{score ->
-        _finalresult.value = score}
-        Log.i("ResultViewModel", "Final score in resultviewmodel is $finalresult.value ")
+    val clearButtonVisible = Transformations.map(scores2) {
+        it?.isNotEmpty()
     }
-    /*init {
-       // _result.value=finalScore
-        var score=finalresult.value
-
-         Log.i("ResultViewModel", "Final score in results is $score")
-    }*/
 
     fun onDeleteAll(){
         viewModelScope.launch {
             clear()
         }
 
-    }
-
-    private val _navigateToScore = MutableLiveData<Long?>()
-    val navigateToScore
-        get() = _navigateToScore
-
-    fun onClickedScore(id: Long) {
-        _navigateToScore.value = id
-    }
-
-    fun onScoreNavigated() {
-        _navigateToScore.value = null
     }
 }
